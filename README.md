@@ -1,7 +1,7 @@
 # Sea ice prediction
 **Alek Petty**
 
-Python scripts used to produce tseasonal forecasts of Arctic and Antarctic sea ice. Results from our Arctic sea ice forecasts analysis were published in JGR Earth's Future (see references below).
+Python scripts used to produce tseasonal forecasts of Arctic and Antarctic sea ice. Results from our Arctic sea ice forecasts analysis were published in JGR Earth's Future (see references below). The original github repo for those scripts can be found here: https://github.com/akpetty/ArcticSeaIcePrediction2017. This is an updated repository that features a few upgrades to make the forecast scripts easier to use, and more felxible (e.g. for forecasting Antarctic sea ice, different months of the year etc.).
 
 Add more of a description here.
 
@@ -34,19 +34,24 @@ Or run the Python scripts found in the Scripts directory by executing
 python script.py
 ``` 
 
-I have generated some Jupyter Notebooks to provide more of a walkthrough to the gridding and forecast methodology. These can be found in the Scripts/gridding and Scripts/Forecasts directories.
-You can run the Jupyter Notebooks by running the following command in the main directory 
-
-```
-jupyter notebook
-``` 
-
 To make sure the Jupyter Notebooks work, you may need to instal nb_conda as there can be issues with choosing the appropriate kernal
 
 ```
 conda install nb_conda
 ``` 
 
+### Jupyter notebooks
+
+I have generated some Jupyter Notebooks to provide a walk through of the gridding and forecast methodology. 
+
++ ```Scripts/gridding/GriddingDemo.ipynb```: A Jupyter notebook explaining how we grid sea ice concentration data to our own grid.
++ ```Scripts/forecasts/PetysPredictionNotebook.ipynb```: A Jupyter notebook explaining how we produce a sea ice forecast.
+
+You can run the Jupyter Notebooks by running the following command in the relevant directory 
+
+```
+jupyter notebook
+``` 
 
 ### Python scripts
 
