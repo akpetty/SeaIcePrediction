@@ -30,8 +30,6 @@ conda install imageio
 ``` 
 
 The conda environment can be activated with ```source activate py36``` where py36 is the environment name.
-``` 
-
 
 To make sure the Jupyter Notebooks work, you may need to instal nb_conda as there can be issues with choosing the appropriate kernal
 
