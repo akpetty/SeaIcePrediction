@@ -3,7 +3,7 @@
 
 Python scripts used to produce tseasonal forecasts of Arctic and Antarctic sea ice. Results from our Arctic sea ice forecasts analysis were published in JGR Earth's Future (see references below). The original github repo for those scripts can be found here: https://github.com/akpetty/ArcticSeaIcePrediction2017. This is an updated repository that features a few upgrades to make the forecast scripts easier to use, and more felxible (e.g. for forecasting Antarctic sea ice, different months of the year etc.).
 
-Add more of a description here.
+More information to be added shortly.
 
 ## Getting Started
 
@@ -29,10 +29,9 @@ conda install wget
 conda install imageio
 ``` 
 
-Or run the Python scripts found in the Scripts directory by executing
-```
-python script.py
+The conda environment can be activated with ```source activate py36``` where py36 is the environment name.
 ``` 
+
 
 To make sure the Jupyter Notebooks work, you may need to instal nb_conda as there can be issues with choosing the appropriate kernal
 
@@ -55,6 +54,11 @@ jupyter notebook
 
 ### Python scripts
 
+The Python scripts found in the Scripts directory by executing
+```
+python script.py
+``` 
+
 Individual descriptions should be included at the top of each script.
 
 Add info about running and using Jupyter Notebooks.
@@ -64,7 +68,7 @@ Add info about how to generate forecasts using the runFOrecasts.py script.
 
 ### Data
 
-I include the archived and near real-time ice concentration data in /Data/IceConc/. These were obtained from the following, pubclically available, data repositories:
+I include the archived and near real-time ice concentration data in ```/Data/IceConc/```. These were obtained from the following, pubclically available, data repositories:
 
 Sea ice concentration data (final): http://nsidc.org/data/nsidc-0051    
 Sea ice concentration data (near real-time): https://nsidc.org/data/nsidc-0081   

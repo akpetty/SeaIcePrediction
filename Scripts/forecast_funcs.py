@@ -1,3 +1,12 @@
+"""  forecast_funcs.py
+	Various functions used by the forecast repo
+	Author:
+		Alek Petty
+
+	Update history:
+		04/20/2018: Version 1
+"""
+
 import matplotlib
 matplotlib.use("AGG")
 from mpl_toolkits.basemap import Basemap, shiftgrid
@@ -51,6 +60,65 @@ def get_detrended_yr(yearsTr, yearT, var_yearsT, var_yrT, num_years_req):
 				var_yrDT[i, j]=var_yrT[i, j]-lineT_yr
 
 	return var_yearsDT, var_yrDT
+
+def plotForecastOneYear(figPath, years, extent, year, forecastVars, outVarStr, iceType):
+	"""Plot forecast data """
+	
+	rcParams['xtick.major.size'] = 2
+	rcParams['ytick.major.size'] = 2
+	rcParams['axes.linewidth'] = .5
+	rcParams['lines.linewidth'] = .5
+	rcParams['patch.linewidth'] = .5
+	rcParams['axes.labelsize'] = 8
+	rcParams['xtick.labelsize']=8
+	rcParams['ytick.labelsize']=8
+	rcParams['legend.fontsize']=8
+	rcParams['font.size']=7
+	rc('font',**{'family':'sans-serif','sans-serif':['Arial']})
+    
+
+	fig = figure(figsize=(3.5,2.2))
+	ax1=subplot(1, 1, 1)
+	im1 = plot(years, extent, 'k')
+	#im2 = plot(Years[start_year_pred-start_year:], lineT[start_year_pred-start_year:]+ExtentG, 'r')
+	
+	im3 = plot(years[-1], extent[-1], marker='o', markersize=2, color='k')
+	im3 = plot(year, forecastVars[2], marker='x', markersize=2, color='k')
+	im3 = plot(year, forecastVars[3], marker='o', markersize=2, color='r')
+	#errorbar(YearsP, array(lineTP)+array(ExtentG) , yerr=prederror, color='r',fmt='',linestyle='',lw=0.4,capsize=0.5, zorder = 2)
+	#if (np.isfinite(forecastVars[4])):
+	
+	ax1.errorbar(year, forecastVars[3] , yerr=forecastVars[6], color='r',fmt='',linestyle='',lw=0.6,capsize=0.5, zorder = 2)
+	#ax1.errorbar(yearsP, extentPredAbs , yerr=[1.96*x for x in perr], color='r',fmt='',linestyle='',lw=0.3,capsize=0.5, zorder = 2)
+
+	forecastStr='%.2f' %(forecastVars[3])
+	observedStr='%.2f' %(extent[-1])
+
+	ax1.annotate('Year: '+str(year)+'\nObserved: '+observedStr+r' M km$^2$',
+ 		xy=(0.7, 1.02), xycoords='axes fraction', horizontalalignment='left', verticalalignment='top')
+
+	ax1.annotate('\nForecast: '+forecastStr+r' M km$^2$',
+ 		xy=(0.7, 0.9), xycoords='axes fraction', color='r', horizontalalignment='left', verticalalignment='top')
+
+	ax1.annotate('June forecasts of September sea ice / @alekpetty / alekpetty.com', fontsize=5, 
+ 		xy=(0.02, 0.02), xycoords='axes fraction', horizontalalignment='left', verticalalignment='bottom')
+
+	ax1.set_ylabel(iceType+r' (Million km$^2$)')
+	#ax1.set_xlabel('Years')
+	ax1.set_xlim(1980, 2020)
+	ax1.set_xticks(np.arange(1980, 2021, 10))
+	ax1.set_xticks(np.arange(1980, 2021, 5), minor=True)
+	#ax1.set_xticklabels([])
+	ax1.set_ylim(3, 8)
+
+	ax1.spines['right'].set_visible(False)
+	ax1.spines['top'].set_visible(False)
+
+	plt.tight_layout()
+	#subplots_adjust(left=0.15, right=0.90, bottom=0.17, top=0.96, hspace=0)
+
+	savefig(figPath+'/forecast'+outVarStr+'.png', dpi=300)
+	close(fig)
 
 
 def get_psnlatslons(data_path):

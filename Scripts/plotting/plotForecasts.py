@@ -1,13 +1,11 @@
-""" 
- get_multivar_forecast_months_exp.py
- Date: 02/03/2017
- Author: Alek Petty
- Description: Script to generate sea ice extent forecast using a given variable (or multiple variables) for a given predictor and predictand month
+"""  plotForecasts.py
+	Script to plot the various forecast scripts
+	Run with e.g. python plotForecasts.py 
+	Author:
+		Alek Petty
 
- Run with e.g. python -i get_multivar_forecast_months_exp.py 
- If you want to run with options, uncomment out the parser lines, then run as:
- python -i get_multivar_forecast_months_exp.py  --fmonth 6 --pmonth 9 --fvars conc --weight 1
-
+	Update history:
+		04/20/2018: Version 1
 """
 import matplotlib
 matplotlib.use("AGG")
@@ -19,7 +17,7 @@ from pylab import *
 
 
 
-def main(endYear):
+def main(endYear, fmonth, pmonth):
 	rawDataPath = '../../Data/' 
 	derivedDataPath = '../../DataOutput/'
 	saveDataPath=derivedDataPath+'/Arctic/'
@@ -34,8 +32,6 @@ def main(endYear):
 	#endYear=2017
 	weight=1
 	region=0
-	fmonth=6
-	pmonth=9
 
 	varStrsOut=''.join(fvars)
 
@@ -126,6 +122,6 @@ def main(endYear):
 if __name__ == '__main__':
 	#main(2015, 6, 9)
 	for y in range(1991, 2017+1, 1):
-		main(y)
+		main(y, 6, 9)
 
 

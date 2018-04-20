@@ -1,9 +1,12 @@
-############################################################## 
-# Date: 01/01/17
-# Name: grid_iceconc.py
-# Author: Alek Petty
-# Description: Grid the ice concentration data onto a coarser polar stereographic grid 
+"""  grid_iceconcAA.py
+	Script to grid Antarctic sea ice concentration data onto our given domain
+	Run with e.g. python grid_iceconcAA.py 
+	Author:
+		Alek Petty
 
+	Update history:
+		04/20/2018: Version 1
+"""
 import matplotlib
 matplotlib.use("AGG")
 from mpl_toolkits.basemap import Basemap, shiftgrid
