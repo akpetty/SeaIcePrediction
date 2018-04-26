@@ -1,5 +1,7 @@
 # Sea ice prediction
-**Alek Petty**
+
+## Contact
+Alek Petty - [alekpetty.com](http://www.alekpetty.com) - [@alekpetty](https://twitter.com/alekpetty)
 
 Python scripts used to produce tseasonal forecasts of Arctic and Antarctic sea ice. Results from our Arctic sea ice forecasts analysis were published in JGR Earth's Future (see references below). The original github repo for those scripts can be found here: https://github.com/akpetty/ArcticSeaIcePrediction2017. This is an updated repository that features a few upgrades to make the forecast scripts easier to use, and more felxible (e.g. for forecasting Antarctic sea ice, different months of the year etc.).
 
