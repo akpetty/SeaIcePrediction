@@ -3,6 +3,8 @@
 ## Contact
 Alek Petty - [alekpetty.com](http://www.alekpetty.com) - [@alekpetty](https://twitter.com/alekpetty)
 
+## Introduction
+
 Included in this repository is Python code to produce seasonal forecasts of Arctic and Antarctic sea ice. Results from our summer Arctic sea ice forecasts were published in JGR Earth's Future (see references below). In that paper we demonstrated 'skillful' seasonal forecasts of summer (September) Arctic sea ice extent. We define 'skillful' as a forecast that performs better than simply continuing the linear, downward, trend in Arctic sea ice extent.
 
 The model can forecast the monthly mean sea ice area or extent across either hemisphere for any month or year (since 1980) using gridded spatial data of the sea ice state (primairly sea ice concetration, but also melt onset and melt pond coverage). The underlying forecast model utilizes a simple linear regression framework, detrended gridded input data, and a simple correlation/weighting scheme. Weighting the de-trended input data was shown to be an important process for improving forecast skill for longer (several month) lead times.
@@ -12,7 +14,7 @@ The original github repo for those scripts can be found here: https://github.com
 I have included some information below that should get you up and running. I recently ported the scripts over to work in Python 3 (3.6) and all seems to be the same as it was in Python 2.7.
 
 
-## Desired model improvements.
+### Desired model improvements.
 
 * Investigate more sophisticated prediction models. This model currently uses a simple linear regression framwework at its core. More sophisticated machine learning methods are likely to offer improvements in skill, especially at predicting extreme deviations from the long-term trend, which linear regression models struggle with. The Jupyter Notebook should provide an easy framework to test different models for a given forecast.
 
