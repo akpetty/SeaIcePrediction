@@ -77,7 +77,7 @@ python script.py
 
 Individual descriptions should be included at the top of each script.
 
-The script ```/Scripts/runForecasts.py``` includes commands to run the various scripts needed to go from raw ice concentration data to a given sea ice forecast. This is a work in progress. Alternatively you can just run the individual scripts needed.
+The script ```/Scripts/runForecasts.py``` includes commands to run the various scripts needed to go from raw ice concentration data to a given sea ice forecast. This is a work in progress. Alternatively you can just run the individual scripts needed as follows:
 
 * The shell script ```./getData/wgetData.sh month year sensor``` grabs sea ice concentration data from the NSIDC and stores it in the ```/Data``` folder.
 
