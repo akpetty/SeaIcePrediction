@@ -15,12 +15,14 @@ month=2 # here month starts from 1
 year=2017
 sensor=f17
 
-# DO A CHECK TO SEE IF DATA EXISTS FIRST!
+# ADD A CHECK TO SEE IF DATA EXISTS FIRST!
 
-
+#
 subprocess.call('./getData/wgetData.sh month year sensor %s %s %s' % (month, year, sensor) )
 
-# DO A CHECK TO SEE IF DATA EXISTS FIRST!
+# ADD A CHECK TO SEE IF DATA EXISTS FIRST!
+
+
 import sys
 sys.path.append('/gridding/')
 import grid_iceconcA
