@@ -9,7 +9,7 @@ Included in this repository is Python code to produce seasonal forecasts of Arct
 
 The model can forecast the monthly mean sea ice area or extent across either hemisphere for any month or year (since 1980) using gridded spatial data of the sea ice state (primairly sea ice concetration, but also melt onset and melt pond coverage). The underlying forecast model utilizes a simple linear regression framework, detrended gridded input data, and a simple correlation/weighting scheme. Weighting the de-trended input data was shown to be an important process for improving forecast skill for longer (several month) lead times.
 
-The original github repo for those scripts can be found here: https://github.com/akpetty/ArcticSeaIcePrediction2017. This is an updated repository that features a few upgrades to make the forecast scripts easier to use, and more felxible (e.g. for forecasting Antarctic sea ice, different months of the year etc.).
+The original github repo for those scripts can be found here: https://github.com/akpetty/ArcticSeaIcePrediction2017. This is an updated repository that features a few upgrades to make the forecast scripts easier to use, and more flexible (e.g. for forecasting Antarctic sea ice, different months of the year etc.).
 
 I have included some information below that should get you up and running. I recently ported the scripts over to work in Python 3 (3.6) and all seems to be the same as it was in Python 2.7.
 
@@ -29,7 +29,7 @@ I have included some information below that should get you up and running. I rec
 
 I recommend using conda to install your Python environment. You can build this from the environment I used and exported:
 ```
-conda env create -f environment.yml
+conda env create -n py36 -f environment.yml
 ```
 
 Alternatively you can create your own Python environment with the following command:
@@ -89,7 +89,7 @@ The script ```/Scripts/runForecasts.py``` includes commands to run the various s
 
 ### Data
 
-I include the archived and near real-time ice concentration data in ```/Data/IceConc/```. These were obtained from the following, pubclically available, data repositories:
+I have included the archived and near real-time ice concentration data in ```/Data/IceConc/```. These were obtained from the following, publically available, data repositories:
 
 Sea ice concentration data (final): http://nsidc.org/data/nsidc-0051    
 Sea ice concentration data (near real-time): https://nsidc.org/data/nsidc-0081   
