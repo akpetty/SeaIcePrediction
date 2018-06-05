@@ -60,19 +60,20 @@ def main(year, fmonth, pmonth, fvars=['conc'], iceType='extent', hemStr='N', sii
 
 	"""
 	
-	rawDataPath = '../../Data/' 
-	derivedDataPath = '../../DataOutput/'
+	rawDataPath = '/Users/aapetty/GitRepos/GitHub/SeaIcePrediction/Data/' 
+	derivedDataPath = '/Users/aapetty/GitRepos/GitHub/SeaIcePrediction/DataOutput/'
 	
 
 	if (hemStr=='S'):
 		saveDataPath=derivedDataPath+'/Antarctic/'
-		figPath='../../Figures/'+'/Antarctic/'
+		figPath='../../Figures/'+'/Antarctic/YearlyPredictions/'
 	elif (hemStr=='N'):
 		saveDataPath=derivedDataPath+'/Arctic/'
-		figPath='../../Figures/'+'/Arctic/'
-	elif (region=='A'):
+		figPath='../../Figures/'+'/Arctic/YearlyPredictions/'
+	
+	if (region=='A'):
 		saveDataPath=derivedDataPath+'/Alaska/'
-		figPath='../../Figures/'+'/Alaska/'
+		figPath='../../Figures/'+'/Alaska/YearlyPredictions/'
 
 	print ('Forecast year:', year)
 	print ('Forecast data month:', fmonth, 'Predicted month:', pmonth)
@@ -91,7 +92,7 @@ def main(year, fmonth, pmonth, fvars=['conc'], iceType='extent', hemStr='N', sii
 
 	
 	forecastVals=ff.CalcForecastMultiVar(rawDataPath, derivedDataPath, year, startYear, fvars, fmonth, pmonth=pmonth,
-			region=region, anomObs=1, numYearsReq=numYearsReq, weight=weight, outWeights=outWeights, 
+			region=region, anomObs=anomObsT, numYearsReq=numYearsReq, weight=weight, outWeights=outWeights, 
 			icetype=iceType, hemStr=hemStr, siiVersion=siiVersion)
 	
 	print ('Observed ice state:', forecastVals[0])
@@ -104,17 +105,29 @@ def main(year, fmonth, pmonth, fvars=['conc'], iceType='extent', hemStr='N', sii
 	array(forecastVals).dump(saveDataPath+outStr)
 
 	if (plotForecast==1):
-		years, extent = ff.get_ice_extentN(rawDataPath, pmonth, startYear, year, 
-				icetype=iceType, version=siiVersion, hemStr=hemStr)
+		if (region==0):
+			years, extent = ff.get_ice_extentN(rawDataPath, pmonth, startYear, year, 
+					icetype=iceType, version=siiVersion, hemStr=hemStr)
+			
+			ff.plotForecastOneYear(figPath, years, extent, year, forecastVals, outStr, iceType, minval=15, maxval=20)
 
-		plotForecastOneYear(figPath, years, extent, year, forecastVals, outStr, iceType)
 
+		elif (region=='A'):
+			poleStr='A'
+
+			extent=loadtxt(derivedDataPath+'/Extent/'+'ice_'+iceType+'_M'+str(pmonth)+'R'+str(region)+'_'+str(startYear)+'2017'+poleStr)
+			extent=extent[0:year-startYear+1]
+			years=np.arange(startYear, startYear+size(extent), 1)
+
+			ff.plotForecastOneYear(figPath, years, extent, year, forecastVals, outStr, iceType, minval=0, maxval=2)
+
+		
 
 #-- run main program
 if __name__ == '__main__':
 	#main(2015, 6, 9)
-	for y in range(1990, 2017+1, 1):
-		main(y, 6, 9)
+	for y in range(1990, 2018+1, 1):
+		main(y, 5, 9, hemStr='S', startYear=1979, region=0)
 	#	for m in range(startMonth, endMonth+1):
 	#		print (y, m)
 	#		

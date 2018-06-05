@@ -11,34 +11,41 @@
 import subprocess
 import shlex
 
-month=2 # here month starts from 1
-year=2017
-sensor=f17
+pmonth=9 #9= September
+month=5 # here month starts from 1
+monthStr='%02d' %(month)
+year=2018
+yearStr=str(year)
+sensor='f18'
+hemisphere='n'
+
+
 
 # ADD A CHECK TO SEE IF DATA EXISTS FIRST!
 
-#
-subprocess.call('./getData/wgetData.sh month year sensor %s %s %s' % (month, year, sensor) )
+subprocess.check_call(['./getData/wgetDataNRT.sh', monthStr, yearStr, sensor, hemisphere])
+
 
 # ADD A CHECK TO SEE IF DATA EXISTS FIRST!
 
 
 import sys
-sys.path.append('/gridding/')
+sys.path.append('./gridding/')
 import grid_iceconcA
 
 grid_iceconcA.main(year, month-1)
 
 # Run forecasts
+sys.path.append('./forecasts/')
 import calcForecastYears
 
-calcForecastYears.main(year, 6, 9))
-
+calcForecastYears.main(year, month, pmonth)
 
 # Plot forecast
+sys.path.append('./plotting/')
 import plotForecasts
 
-plotForecasts.main(year, 6, 9))
+plotForecasts.main(year, month, pmonth)
 
 
 

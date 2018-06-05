@@ -17,21 +17,24 @@ from pylab import *
 
 
 
-def main(endYear, fmonth, pmonth):
+def main(endYear, fmonth, pmonth, fvars=['conc'], iceType='extent', hemStr='N', siiVersion='v3.0', startYear=1979, minval=3, maxval=8, region=0, textStr='June forecasts of September sea ice'):
 	rawDataPath = '../../Data/' 
 	derivedDataPath = '../../DataOutput/'
-	saveDataPath=derivedDataPath+'/Arctic/'
-	figPath='../../Figures/'+'/Arctic/Predictions/'
+	if (hemStr=='S'):
+		saveDataPath=derivedDataPath+'/Antarctic/'
+		figPath='../../Figures/'+'/Forecasts/'
+	elif (region=='A'):
+		saveDataPath=derivedDataPath+'/Alaska/'
+		figPath='../../Figures/'+'/Forecasts/'
 
-	fvars=['conc']
-	iceType='extent'
-	hemStr='N'
-	siiVersion='v3.0'
-	startYear=1980
+	else:
+		saveDataPath=derivedDataPath+'/Arctic/'
+		figPath='../../Figures/'+'/Forecasts/'
+	
+	
 	startYearP=1990
 	#endYear=2017
 	weight=1
-	region=0
 
 	varStrsOut=''.join(fvars)
 
@@ -45,13 +48,24 @@ def main(endYear, fmonth, pmonth):
 
 		forecastVarsM=np.vstack([forecastVarsM, forecastVars])
 
-
-	years, extent = ff.get_ice_extentN(rawDataPath, pmonth, startYear, year, 
+	if (region==0):
+		years, extent = ff.get_ice_extentN(rawDataPath, pmonth, startYear, year, 
 			icetype=iceType, version=siiVersion, hemStr=hemStr)
+	elif (region=='A'):
+		poleStr='A'
+
+		extent=loadtxt(derivedDataPath+'/Extent/'+'ice_'+iceType+'_M'+str(pmonth)+'R'+str(region)+'_'+str(startYear)+'2017'+poleStr)
+		#extent=extent[0:year-startYear+1]
+		years=np.arange(startYear, 2017+1, 1)
+
 
 
 	yearsP=np.arange(startYearP, endYear+1)
 
+	#extentyr, extentObsDT, extTrendP, extentForrAbs, extentForrDT, anom, prstd[0]
+	print ('prediction int:', forecastVars[-1])
+
+	skill = '%.2f' %(1 - (ff.rms(forecastVarsM[0:-1, 5]))/(ff.rms(forecastVarsM[0:-1, 1])))
 
 
 
@@ -69,7 +83,7 @@ def main(endYear, fmonth, pmonth):
 	rc('font',**{'family':'sans-serif','sans-serif':['Arial']})
 
 
-	fig = figure(figsize=(3.5,2.2))
+	fig = figure(figsize=(4.,2.2))
 	ax1=subplot(1, 1, 1)
 	im1 = plot(years, extent, 'k')
 	#im2 = plot(Years[start_year_pred-start_year:], lineT[start_year_pred-start_year:]+ExtentG, 'r')
@@ -77,7 +91,7 @@ def main(endYear, fmonth, pmonth):
 	#im3 = plot(years[-1], extent[-1], marker='o', markersize=2, color='k')
 	im3 = plot(yearsP, forecastVarsM[:, 2], marker='x', markersize=1, alpha=0.5, color='k')
 	im3 = plot(yearsP, forecastVarsM[:, 3], marker='o', markersize=1, alpha=0.5, color='r')
-	ax1.errorbar(yearsP, forecastVarsM[:, 3] , yerr=forecastVarsM[:, 6], color='r',fmt='',linestyle='',alpha=0.5, lw=0.6,capsize=0.5, zorder = 2)
+	#ax1.errorbar(yearsP, forecastVarsM[:, 3] , yerr=forecastVarsM[:, 6], color='r',fmt='',linestyle='',alpha=0.5, lw=0.6,capsize=0.5, zorder = 2)
 
 	im3 = plot(yearsP[-1], forecastVarsM[-1, 2], marker='x', markersize=2, color='k')
 	im3 = plot(yearsP[-1], forecastVarsM[-1, 3], marker='o', markersize=2, color='r')
@@ -93,12 +107,12 @@ def main(endYear, fmonth, pmonth):
 	observedStr='%.2f' %(extent[-1])
 
 	ax1.annotate('Year: '+str(year)+'\nObserved: '+observedStr+r' M km$^2$'+'\nTrend: '+linearStr+r' M km$^2$',
-			xy=(0.7, 1.02), xycoords='axes fraction', horizontalalignment='left', verticalalignment='top')
+			xy=(1., 1.02), xycoords='axes fraction', horizontalalignment='left', verticalalignment='top')
 
-	ax1.annotate('\nForecast: '+forecastStr+r' M km$^2$',
-			xy=(0.7, 0.85), xycoords='axes fraction', color='r', horizontalalignment='left', verticalalignment='top')
+	ax1.annotate('\nForecast: '+forecastStr+r' M km$^2$'+'\nSkill:'+skill,
+			xy=(1., 0.85), xycoords='axes fraction', color='r', horizontalalignment='left', verticalalignment='top')
 
-	ax1.annotate('June forecasts of September sea ice', fontsize=5, 
+	ax1.annotate(textStr, fontsize=5, 
 			xy=(0.02, 0.02), xycoords='axes fraction', horizontalalignment='left', verticalalignment='bottom')
 
 	ax1.set_ylabel(iceType+r' (Million km$^2$)')
@@ -107,21 +121,24 @@ def main(endYear, fmonth, pmonth):
 	ax1.set_xticks(np.arange(1980, 2021, 10))
 	ax1.set_xticks(np.arange(1980, 2021, 5), minor=True)
 	#ax1.set_xticklabels([])
-	ax1.set_ylim(3, 8)
+	ax1.set_ylim(minval, maxval)
+	ax1.set_yticks(np.arange(minval, maxval+1, 1))
 
 	ax1.spines['right'].set_visible(False)
 	ax1.spines['top'].set_visible(False)
 
-	plt.tight_layout()
+	#plt.tight_layout()
 	#subplots_adjust(left=0.15, right=0.90, bottom=0.17, top=0.96, hspace=0)
+	subplots_adjust(left=0.11, right=0.74, bottom=0.1, top=0.96, hspace=0)
 
-	savefig(figPath+'/forecast'+outStr+'multi.png', dpi=300)
+	savefig(figPath+'/'+outStr+hemStr+'multi.png', dpi=300)
 	close(fig)
+
 
 #-- run main program
 if __name__ == '__main__':
 	#main(2015, 6, 9)
-	for y in range(1991, 2017+1, 1):
-		main(y, 6, 9)
+	for y in range(2018, 2018+1, 1):
+		main(y, 5, 9, hemStr='N', minval=3, maxval=8, region=0, startYear=1980, textStr='May forecasts of September sea ice extent')
 
 

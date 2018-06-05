@@ -63,20 +63,20 @@ def plot_conc(figpath, m , xpts, ypts, conc_year, year, month, grid_str, poleStr
 
 
 
-def main(year, month, alg=0, outputGrid=0):
+def main(year, month, alg=0, poleStr='A', outputGrid=0):
 
 	m = Basemap(projection='npstere',boundinglat=65,lon_0=0, resolution='l'  )
 
-	datapath='../../Data/'
-	dataoutpath='../../DataOutput/IceConcA/'
-	figpath='../../Figures/Arctic/IceConc/'
+	datapath='/Users/aapetty/GitRepos/GitHub/SeaIcePrediction/Data/'
+	dataoutpath='/Users/aapetty/GitRepos/GitHub/SeaIcePrediction/DataOutput/IceConcA/'
+	figpath='/Users/aapetty/GitRepos/GitHub/SeaIcePrediction/Figures/Arctic/IceConc/'
 
 	dx_res = 100000.
 	nx = int((m.xmax-m.xmin)/dx_res)+1; ny = int((m.ymax-m.ymin)/dx_res)+1
 	grid_str=str(int(dx_res/1000))+'km'
 	lonsG, latsG, xptsG, yptsG = m.makegrid(nx, ny, returnxy=True)
 
-	poleStr='A'
+	
 
 	if (outputGrid==1):
 		xptsG.dump(dataoutpath+'xpts'+grid_str+poleStr)
@@ -89,7 +89,6 @@ def main(year, month, alg=0, outputGrid=0):
 	f = Dataset(datapath+'/OTHER/NIC_valid_ice_mask.N25km.01.1972-2007.nc', 'r')
 	ice_flag = f.variables['valid_ice_flag'][:]
 	region_mask = ff.get_region_mask_sect(datapath, m, xypts_return=0)
-
 
 
 	if (year>2015):
@@ -128,11 +127,11 @@ def main(year, month, alg=0, outputGrid=0):
 
 
 startYear=1979
-endYear=2017
+endYear=2018
 
-startMonth=5 #3=April, 7=August
+startMonth=4 #3=April, 7=August
 
-endMonth=5
+endMonth=4
 #-- run main program
 if __name__ == '__main__':
 	for y in range(startYear, endYear+1, 1):

@@ -61,7 +61,7 @@ def get_detrended_yr(yearsTr, yearT, var_yearsT, var_yrT, num_years_req):
 
 	return var_yearsDT, var_yrDT
 
-def plotForecastOneYear(figPath, years, extent, year, forecastVars, outVarStr, iceType):
+def plotForecastOneYear(figPath, years, extent, year, forecastVars, outVarStr, iceType, minval=0, maxval=10):
 	"""Plot forecast data """
 	
 	rcParams['xtick.major.size'] = 2
@@ -77,7 +77,7 @@ def plotForecastOneYear(figPath, years, extent, year, forecastVars, outVarStr, i
 	rc('font',**{'family':'sans-serif','sans-serif':['Arial']})
     
 
-	fig = figure(figsize=(3.5,2.2))
+	fig = figure(figsize=(4.,2.2))
 	ax1=subplot(1, 1, 1)
 	im1 = plot(years, extent, 'k')
 	#im2 = plot(Years[start_year_pred-start_year:], lineT[start_year_pred-start_year:]+ExtentG, 'r')
@@ -92,16 +92,20 @@ def plotForecastOneYear(figPath, years, extent, year, forecastVars, outVarStr, i
 	#ax1.errorbar(yearsP, extentPredAbs , yerr=[1.96*x for x in perr], color='r',fmt='',linestyle='',lw=0.3,capsize=0.5, zorder = 2)
 
 	forecastStr='%.2f' %(forecastVars[3])
+	linearStr='%.2f' %(forecastVars[2])
 	observedStr='%.2f' %(extent[-1])
 
-	ax1.annotate('Year: '+str(year)+'\nObserved: '+observedStr+r' M km$^2$',
- 		xy=(0.7, 1.02), xycoords='axes fraction', horizontalalignment='left', verticalalignment='top')
+	ax1.annotate('Year: '+str(year)+'\nObserved: '+observedStr+r' M km$^2$'+'\nTrend: '+linearStr+r' M km$^2$',
+			xy=(1., 1.02), xycoords='axes fraction', horizontalalignment='left', verticalalignment='top')
+
+	#ax1.annotate('Year: '+str(year)+'\nObserved: '+observedStr+r' M km$^2$',
+ 	#	xy=(1., 1.02), xycoords='axes fraction', horizontalalignment='left', verticalalignment='top')
 
 	ax1.annotate('\nForecast: '+forecastStr+r' M km$^2$',
- 		xy=(0.7, 0.9), xycoords='axes fraction', color='r', horizontalalignment='left', verticalalignment='top')
+ 		xy=(1., 0.85), xycoords='axes fraction', color='r', horizontalalignment='left', verticalalignment='top')
 
-	ax1.annotate('June forecasts of September sea ice / @alekpetty / alekpetty.com', fontsize=5, 
- 		xy=(0.02, 0.02), xycoords='axes fraction', horizontalalignment='left', verticalalignment='bottom')
+	#ax1.annotate('June forecasts of September sea ice / @alekpetty / alekpetty.com', fontsize=5, 
+ 	#	xy=(0.02, 0.02), xycoords='axes fraction', horizontalalignment='left', verticalalignment='bottom')
 
 	ax1.set_ylabel(iceType+r' (Million km$^2$)')
 	#ax1.set_xlabel('Years')
@@ -109,13 +113,13 @@ def plotForecastOneYear(figPath, years, extent, year, forecastVars, outVarStr, i
 	ax1.set_xticks(np.arange(1980, 2021, 10))
 	ax1.set_xticks(np.arange(1980, 2021, 5), minor=True)
 	#ax1.set_xticklabels([])
-	ax1.set_ylim(3, 8)
+	ax1.set_ylim(minval, maxval)
 
 	ax1.spines['right'].set_visible(False)
 	ax1.spines['top'].set_visible(False)
 
-	plt.tight_layout()
-	#subplots_adjust(left=0.15, right=0.90, bottom=0.17, top=0.96, hspace=0)
+	#plt.tight_layout()
+	subplots_adjust(left=0.13, right=0.75, bottom=0.1, top=0.96, hspace=0)
 
 	savefig(figPath+'/forecast'+outVarStr+'.png', dpi=300)
 	close(fig)
@@ -534,7 +538,7 @@ def CalcForecastMultiVar(rawdatapath, deriveddatapath, yearF, startYear, predvar
 		elif (hemStr=='S'):
 			poleStr='AA'
 
-		extentALL=loadtxt(deriveddatapath+'/Extent/'+'ice_'+icetype+'_M'+str(pmonth)+'R'+str(region)+'_'+str(startYearF)+'2016'+poleStr)
+		extentALL=loadtxt(deriveddatapath+'/Extent/'+'ice_'+icetype+'_M'+str(pmonth)+'R'+str(region)+'_'+str(startYearF)+'2017'+poleStr)
 		
 		#get years and extent for years preceeding the given forecast year
 		yearsPr=np.arange(startYear, yearP, 1)
