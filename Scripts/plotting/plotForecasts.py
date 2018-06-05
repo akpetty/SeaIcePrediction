@@ -132,6 +132,7 @@ def main(endYear, fmonth, pmonth, fvars=['conc'], iceType='extent', hemStr='N', 
 	subplots_adjust(left=0.11, right=0.74, bottom=0.1, top=0.96, hspace=0)
 
 	savefig(figPath+'/'+outStr+hemStr+'multi.png', dpi=300)
+	savefig(figPath+'/'+outStr+hemStr+'multi.jpg', dpi=300)
 	close(fig)
 
 
