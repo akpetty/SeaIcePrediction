@@ -13,7 +13,7 @@ Included in this repository is Python code to produce seasonal forecasts of Arct
      class="img-square"
      title="September Arctic sea ice extent forecasts using June ice concentration data"
      style="max-width: 600px; margin-right: 10px; margin-top: 5px; margin-bottom: 5px;">
-     <figcaption>September Arctic sea ice extent forecasts using June ice concentration data (red line and marker). The vertical line shows the prediction confidence interval (1 S.D.). The solid black lines are the observed extent using the NSIDC Arctic Sea Ice Index v3 while the black crosses and light grey line show the forecasts using linear trend persistence. </figcaption>
+     <figcaption><font size="8">September Arctic sea ice extent forecasts using June ice concentration data (red line and marker). The vertical line shows the prediction confidence interval (1 S.D.). The solid black lines are the observed extent using the NSIDC Arctic Sea Ice Index v3 while the black crosses and light grey line show the forecasts using linear trend persistence. </font> </figcaption>
 </figure>
 </div>
 
