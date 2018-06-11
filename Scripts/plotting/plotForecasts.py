@@ -139,7 +139,7 @@ def main(endYear, fmonth, pmonth, fvars=['conc'], iceType='extent', hemStr='N', 
 #-- run main program
 if __name__ == '__main__':
 	#main(2015, 6, 9)
-	for y in range(2018, 2018+1, 1):
-		main(y, 5, 9, hemStr='N', minval=3, maxval=8, region=0, startYear=1980, textStr='May forecasts of September sea ice extent')
+	for y in range(2017, 2017+1, 1):
+		main(y, 6, 9, hemStr='N', minval=3, maxval=8, region=0, startYear=1980, textStr='June forecasts of September sea ice extent')
 
 

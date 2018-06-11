@@ -126,8 +126,8 @@ def main(year, fmonth, pmonth, fvars=['conc'], iceType='extent', hemStr='N', sii
 #-- run main program
 if __name__ == '__main__':
 	#main(2015, 6, 9)
-	for y in range(1990, 2018+1, 1):
-		main(y, 5, 9, hemStr='S', startYear=1979, region=0)
+	for y in range(1990, 2017+1, 1):
+		main(y, 7, 9, hemStr='N', startYear=1979, region=0)
 	#	for m in range(startMonth, endMonth+1):
 	#		print (y, m)
 	#		

@@ -540,12 +540,14 @@ def CalcForecastMultiVar(rawdatapath, deriveddatapath, yearF, startYear, predvar
 
 		extentALL=loadtxt(deriveddatapath+'/Extent/'+'ice_'+icetype+'_M'+str(pmonth)+'R'+str(region)+'_'+str(startYearF)+'2017'+poleStr)
 		
+
 		#get years and extent for years preceeding the given forecast year
 		yearsPr=np.arange(startYear, yearP, 1)
 		extentTr=extentALL[0:yearP-startYear]
 
 		# De-trend the extent data
 		extentDTr, lineTr=get_varDT(yearsPr, extentTr)
+		
 		if (anomObs==1):
 			# Get current year ice extent/area
 			extentyr=extentALL[yearP-startYear]
