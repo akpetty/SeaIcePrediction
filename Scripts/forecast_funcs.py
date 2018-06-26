@@ -637,6 +637,22 @@ def get_pmask(year, month):
 	
 	return pmask
 
+def get_pmas_month(m, rawdatapath, year, month=4):
+
+	fd = open(rawdatapath+'/PIOMAS/heff/heff.H'+str(year), 'rb')
+	dataP = fromfile(file=fd, dtype='f')
+	dataP = reshape(dataP, [12, 120*360])
+	thickness=dataP[month]
+	gridP = loadtxt(rawdatapath+'/PIOMAS/grid.dat.txt')
+
+	lonsP = gridP[0:4320, :].flatten()
+	latsP = gridP[4320:, :].flatten()
+	xptsP,yptsP = m(lonsP, latsP)
+
+	thickness=ma.masked_where(thickness<0.01, thickness)
+
+	return xptsP, yptsP, thickness
+	
 def get_region_mask_sect(datapath, mplot, xypts_return=0):
 	datatype='uint8'
 	file_mask = datapath+'/OTHER/sect_fixed_n.msk'
