@@ -654,6 +654,7 @@ def get_pmas_month(m, rawdatapath, year, month=4):
 	return xptsP, yptsP, thickness
 	
 def get_region_mask_sect(datapath, mplot, xypts_return=0):
+	# Get NSIDC region masks
 	datatype='uint8'
 	file_mask = datapath+'/OTHER/sect_fixed_n.msk'
 	# 1   non-region oceans
@@ -776,7 +777,7 @@ def get_gridvar(griddatapath, fvar, fmonth, yearsT, hemStr, concVersion=''):
 		meltdays=[31, 59, 90, 120, 151, 181, 212, 243]
 		
 		meltday=meltdays[fmonth]
-		dataoutpath=datapath+'/MeltOut/'
+		dataoutpath=datapath+'/Melt_onset/'
 		xpts, ypts, VarYears=get_meltonset_gridded(dataoutpath, yearsT, fvar, hemStr)
 		# Express melt onset relative to the given forecast date (end of the forecast month)
 		VarYears=meltday-VarYears
