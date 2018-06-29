@@ -777,7 +777,7 @@ def get_gridvar(griddatapath, fvar, fmonth, yearsT, hemStr, concVersion=''):
 		meltdays=[31, 59, 90, 120, 151, 181, 212, 243]
 		
 		meltday=meltdays[fmonth]
-		dataoutpath=datapath+'/Melt_onset/'
+		dataoutpath=datapath+'/MeltOnset/'
 		xpts, ypts, VarYears=get_meltonset_gridded(dataoutpath, yearsT, fvar, hemStr)
 		# Express melt onset relative to the given forecast date (end of the forecast month)
 		VarYears=meltday-VarYears
