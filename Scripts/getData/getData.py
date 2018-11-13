@@ -11,12 +11,12 @@
 import subprocess
 import shlex
 
-month=5 # here month starts from 1
+month=6 # here month starts from 1
 monthStr='%02d' %(month)
-year=2017
+year=2018
 yearStr=str(year)
 sensor='f18'
-hemisphere='s'
+hemisphere='n'
 
 
 

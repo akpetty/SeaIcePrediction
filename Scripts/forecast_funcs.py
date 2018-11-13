@@ -567,12 +567,12 @@ def CalcForecastMultiVar(rawdatapath, deriveddatapath, yearF, startYear, predvar
 	# Get forecast years
 	yearsFr=np.arange(startYearF, yearF, 1)
 
-	print ('Training years', yearsPr)
-	print ('Predicted year', yearP)
-	print ('Forecast year', yearF)
-	print ('Training start year', startYear)
-	print ('Training start year', startYearF)
-	print ('Forecast years', yearsFr)
+	#print ('Training years', yearsPr)
+	#print ('Predicted year', yearP)
+	#print ('Forecast year', yearF)
+	#print ('Training start year', startYear)
+	#print ('Training start year', startYearF)
+	#print ('Forecast years', yearsFr)
 
 	
 	for varT in predvarYrs:

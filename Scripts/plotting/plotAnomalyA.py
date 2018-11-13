@@ -30,9 +30,9 @@ m = Basemap(projection='npstere',boundinglat=65,lon_0=0, resolution='l'  )
 figpath='../../Figures/Arctic/Anomalies/'
 dataoutpath='../../DataOutput/'
 
-startYear=1980
+startYear=1979
 yearT=2018
-fmonth=5 #6=june
+fmonth=7 #6=june
 pmonth=9 #6=june
 
 

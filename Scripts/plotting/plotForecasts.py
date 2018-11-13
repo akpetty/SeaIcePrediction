@@ -16,20 +16,24 @@ import forecast_funcs as ff
 from pylab import *
 
 
+def main(endYear, fmonth, pmonth, fvars=['conc'], iceType='extent', hemStr='N', siiVersion='v3.0', startYear=1979, minval=3, maxval=8, region=0):
+	
+	monthStrs=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'August', 'September']
+	textStr=monthStrs[fmonth-1]+' forecasts of '+monthStrs[pmonth-1]+' Arctic sea ice '+iceType
 
-def main(endYear, fmonth, pmonth, fvars=['conc'], iceType='extent', hemStr='N', siiVersion='v3.0', startYear=1979, minval=3, maxval=8, region=0, textStr='June forecasts of September sea ice'):
-	rawDataPath = '../../Data/' 
-	derivedDataPath = '../../DataOutput/'
+	repoPath='/Users/aapetty/GitRepos/GitHub/SeaIcePrediction/'
+	rawDataPath = repoPath+'/Data/' 
+	derivedDataPath = repoPath+'/DataOutput/'
 	if (hemStr=='S'):
 		saveDataPath=derivedDataPath+'/Antarctic/'
-		figPath='../../Figures/'+'/Forecasts/'
+		figPath=repoPath+'/Figures/Forecasts/'
 	elif (region=='A'):
 		saveDataPath=derivedDataPath+'/Alaska/'
-		figPath='../../Figures/'+'/Forecasts/'
+		figPath=repoPath+'/Figures/Forecasts/'
 
 	else:
 		saveDataPath=derivedDataPath+'/Arctic/'
-		figPath='../../Figures/'+'/Forecasts/'
+		figPath=repoPath+'/Figures/Forecasts/'
 	
 	
 	startYearP=1990
@@ -63,11 +67,9 @@ def main(endYear, fmonth, pmonth, fvars=['conc'], iceType='extent', hemStr='N', 
 	yearsP=np.arange(startYearP, endYear+1)
 
 	#extentyr, extentObsDT, extTrendP, extentForrAbs, extentForrDT, anom, prstd[0]
-	print ('prediction int:', forecastVars[-1])
+	print ('Prediction int:', forecastVars[-1])
 
 	skill = '%.2f' %(1 - (ff.rms(forecastVarsM[0:-1, 5]))/(ff.rms(forecastVarsM[0:-1, 1])))
-
-
 
 	"""Plot forecast data """
 	rcParams['xtick.major.size'] = 2
@@ -104,29 +106,39 @@ def main(endYear, fmonth, pmonth, fvars=['conc'], iceType='extent', hemStr='N', 
 
 	forecastStr='%.2f' %(forecastVarsM[-1, 3])
 	linearStr='%.2f' %(forecastVarsM[-1, 2])
-	observedStr='%.2f' %(extent[-1])
+	#observedStr='%.2f' %(extent[-1])
 
-	ax1.annotate('Year: '+str(year)+'\nObserved: '+observedStr+r' M km$^2$'+'\nTrend: '+linearStr+r' M km$^2$',
-			xy=(1., 1.02), xycoords='axes fraction', horizontalalignment='left', verticalalignment='top')
+	ax1.annotate('Year: '+str(year)+'\nLinear trend forecast: '+linearStr+r' M km$^2$',
+			xy=(0.8, 1.02), xycoords='axes fraction', horizontalalignment='left', verticalalignment='top')
 
-	ax1.annotate('\nForecast: '+forecastStr+r' M km$^2$'+'\nSkill:'+skill,
-			xy=(1., 0.85), xycoords='axes fraction', color='r', horizontalalignment='left', verticalalignment='top')
+	ax1.annotate('NASA GSFC forecast: '+forecastStr+r' M km$^2$',
+			xy=(0.8, 0.9), xycoords='axes fraction', color='r', horizontalalignment='left', verticalalignment='top')
+
+	#ax1.annotate('Year: '+str(year)+'\nObserved: '+observedStr+r' M km$^2$'+'\nTrend: '+linearStr+r' M km$^2$',
+	#		xy=(1., 1.02), xycoords='axes fraction', horizontalalignment='left', verticalalignment='top')
+
+	#ax1.annotate(,
+	#		xy=(0.8, 0.85), xycoords='axes fraction', color='r', horizontalalignment='left', verticalalignment='top')
+
+	#ax1.annotate('NASA GSFC forecast: '+forecastStr+r' M km$^2$'+'\nSkill:'+skill,
+	#		xy=(0.8, 0.85), xycoords='axes fraction', color='r', horizontalalignment='left', verticalalignment='top')
 
 	ax1.annotate(textStr, fontsize=5, 
 			xy=(0.02, 0.02), xycoords='axes fraction', horizontalalignment='left', verticalalignment='bottom')
 
-	ax1.set_ylabel(iceType+r' (Million km$^2$)')
+	ax1.set_ylabel('Ice '+iceType+r' (Million km$^2$)')
 	#ax1.set_xlabel('Years')
 	ax1.set_xlim(1980, 2020)
 	ax1.set_xticks(np.arange(1980, 2021, 10))
 	ax1.set_xticks(np.arange(1980, 2021, 5), minor=True)
 	#ax1.set_xticklabels([])
-	ax1.set_ylim(minval, maxval)
-	ax1.set_yticks(np.arange(minval, maxval+1, 1))
+	ax1.set_ylim(minval, maxval-0.1)
+	ax1.set_yticks(np.arange(minval, maxval, 1))
 
 	ax1.spines['right'].set_visible(False)
 	ax1.spines['top'].set_visible(False)
 
+	ax1.yaxis.grid(which='major', linestyle='-', linewidth='0.1', color='k')
 	#plt.tight_layout()
 	#subplots_adjust(left=0.15, right=0.90, bottom=0.17, top=0.96, hspace=0)
 	subplots_adjust(left=0.11, right=0.74, bottom=0.1, top=0.96, hspace=0)
@@ -139,7 +151,7 @@ def main(endYear, fmonth, pmonth, fvars=['conc'], iceType='extent', hemStr='N', 
 #-- run main program
 if __name__ == '__main__':
 	#main(2015, 6, 9)
-	for y in range(2017, 2017+1, 1):
-		main(y, 6, 9, hemStr='N', minval=3, maxval=8, region=0, startYear=1980, textStr='June forecasts of September sea ice extent')
+	for y in range(2018, 2018+1, 1):
+		main(y, 7, 9, iceType='extent', hemStr='N', minval=2, maxval=8, region=0, startYear=1979)
 
 

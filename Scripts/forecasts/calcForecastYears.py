@@ -17,7 +17,7 @@ import forecast_funcs as ff
 from pylab import *
 
 
-def main(year, fmonth, pmonth, fvars=['conc'], iceType='extent', hemStr='N', siiVersion='v3.0', startYear=1980, weight=1, region=0, numYearsReq=5, plotForecast=1, plotSkill=1, outSkill=1, outLine=1, outWeights=1):
+def main(year, fmonth, pmonth, fvars=['conc'], iceType='extent', hemStr='N', siiVersion='v3.0', startYear=1979, weight=1, region=0, numYearsReq=5, plotForecast=1, plotSkill=1, outSkill=1, outLine=1, outWeights=1):
 	""" 
 	Main sea ice forecast script. Can be run here (and looped )
 
@@ -59,21 +59,21 @@ def main(year, fmonth, pmonth, fvars=['conc'], iceType='extent', hemStr='N', sii
 			Estimated forecast error (1 SD)
 
 	"""
-	
-	rawDataPath = '/Users/aapetty/GitRepos/GitHub/SeaIcePrediction/Data/' 
-	derivedDataPath = '/Users/aapetty/GitRepos/GitHub/SeaIcePrediction/DataOutput/'
+	repoPath='/Users/aapetty/GitRepos/GitHub/SeaIcePrediction/'
+	rawDataPath = repoPath+'/Data/' 
+	derivedDataPath = repoPath+'/DataOutput/'
 	
 
 	if (hemStr=='S'):
 		saveDataPath=derivedDataPath+'/Antarctic/'
-		figPath='../../Figures/'+'/Antarctic/YearlyPredictions/'
+		figPath=repoPath+'/Figures/Antarctic/YearlyPredictions/'
 	elif (hemStr=='N'):
 		saveDataPath=derivedDataPath+'/Arctic/'
-		figPath='../../Figures/'+'/Arctic/YearlyPredictions/'
+		figPath=repoPath+'/Figures/Arctic/YearlyPredictions/'
 	
 	if (region=='A'):
 		saveDataPath=derivedDataPath+'/Alaska/'
-		figPath='../../Figures/'+'/Alaska/YearlyPredictions/'
+		figPath=repoPath+'/Figures/Alaska/YearlyPredictions/'
 
 	print ('Forecast year:', year)
 	print ('Forecast data month:', fmonth, 'Predicted month:', pmonth)
@@ -109,7 +109,7 @@ def main(year, fmonth, pmonth, fvars=['conc'], iceType='extent', hemStr='N', sii
 			years, extent = ff.get_ice_extentN(rawDataPath, pmonth, startYear, year, 
 					icetype=iceType, version=siiVersion, hemStr=hemStr)
 			
-			ff.plotForecastOneYear(figPath, years, extent, year, forecastVals, outStr, iceType, minval=15, maxval=20)
+			ff.plotForecastOneYear(figPath, years, extent, year, forecastVals, outStr, iceType, minval=2, maxval=8)
 
 
 		elif (region=='A'):
@@ -126,8 +126,8 @@ def main(year, fmonth, pmonth, fvars=['conc'], iceType='extent', hemStr='N', sii
 #-- run main program
 if __name__ == '__main__':
 	#main(2015, 6, 9)
-	for y in range(1990, 2017+1, 1):
-		main(y, 7, 9, hemStr='N', startYear=1979, region=0)
+	for y in range(1990, 2018+1, 1):
+		main(y, 7, 9, iceType='extent', hemStr='N', startYear=1979, region=0)
 	#	for m in range(startMonth, endMonth+1):
 	#		print (y, m)
 	#		

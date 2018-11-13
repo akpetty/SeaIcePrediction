@@ -74,6 +74,7 @@ def main(year, month, alg=0, outputGrid=1):
 	nx = int((m.xmax-m.xmin)/dx_res)+1; ny = int((m.ymax-m.ymin)/dx_res)+1
 	grid_str=str(int(dx_res/1000))+'km'
 	lonsG, latsG, xptsG, yptsG = m.makegrid(nx, ny, returnxy=True)
+	print lonsG.shape
 
 	poleStr='AA'
 
@@ -125,12 +126,12 @@ def main(year, month, alg=0, outputGrid=1):
 
 
 
-startYear=2017
+startYear=1979
 endYear=2018
 
-startMonth=4 #3=April, 7=August
+startMonth=6 #3=April, 7=August
 
-endMonth=4
+endMonth=6
 #-- run main program
 if __name__ == '__main__':
 	for y in range(startYear, endYear+1, 1):
