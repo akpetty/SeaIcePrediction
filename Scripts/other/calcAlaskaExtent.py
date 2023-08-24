@@ -31,7 +31,7 @@ region_mask, xpts, ypts = ff.get_region_mask_sect(dataPath, m, xypts_return=1)
 
 
 start_year=1979
-end_year=2017
+end_year=2018
 month = 9 # 9 = Sept
 alg=0 #0=NASA TEAM, 1=BOOTSTRAP
 

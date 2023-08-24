@@ -36,5 +36,10 @@ year, mo,    data-type, region, extent,   area
 2013,  6,      Goddard,      S,  14.15,  11.27
 2014,  6,      Goddard,      S,  14.69,  12.06
 2015,  6,      Goddard,      S,  14.47,  11.48
-2016,  6,      NRTSI-G,      S,  13.21,  10.61
-2017,  6,      NRTSI-G,      S,  12.37,   9.81
+2016,  6,      Goddard,      S,  13.24,  10.61
+2017,  6,      Goddard,      S,  12.41,   9.80
+2018,  6,      Goddard,      S,  12.89,  10.23
+2019,  6,      Goddard,      S,  12.25,   9.75
+2020,  6,      Goddard,      S,  13.27,  10.59
+2021,  6,      Goddard,      S,  13.54,  11.05
+2022,  6,      NRTSI-G,      S,  12.13,   9.49

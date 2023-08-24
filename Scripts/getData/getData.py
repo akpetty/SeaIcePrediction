@@ -1,5 +1,5 @@
-"""  runForecasts.py
-	Script to run the various forecast scripts
+"""  getData.py
+	Script to download ice conc data
 	Run with e.g. python runForecasts.py 
 	Author:
 		Alek Petty
@@ -11,7 +11,7 @@
 import subprocess
 import shlex
 
-month=6 # here month starts from 1
+month=9 # here month starts from 1
 monthStr='%02d' %(month)
 year=2018
 yearStr=str(year)

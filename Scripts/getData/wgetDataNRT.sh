@@ -57,15 +57,15 @@ FILE=https://daacdata.apps.nsidc.org/pub/DATASETS/nsidc0081_nrt_nasateam_seaice/
 echo $FILE
 wget --load-cookies ~/.urs_cookies --save-cookies ~/.urs_cookies \
 --keep-session-cookies --no-check-certificate --auth-no-challenge=on \
--nH --cut-dirs=5 --directory-prefix=/Users/aapetty/GitRepos/GitHub/SeaIcePrediction/Data/Temp/  --reject "index.html*" \
+-nH --cut-dirs=5 --directory-prefix=/Users/aapetty/GitHub/akpetty/SeaIcePrediction/Data/Temp/  --reject "index.html*" \
 -np -e robots=off -r $FILE
 
 done
 
 # COPY TO CORRECT FOLDER
-cp -r /Users/aapetty/GitRepos/GitHub/SeaIcePrediction/Data/Temp/ /Users/aapetty/GitRepos/GitHub/SeaIcePrediction/Data/ICE_CONC/NASA_TEAM/"$folder2"/NRT/
+cp -r /Users/aapetty/GitHub/akpetty/SeaIcePrediction/Data/Temp/ /Users/aapetty/GitHub/akpetty/SeaIcePrediction/Data/ICE_CONC/NASA_TEAM/"$folder2"/NRT/
 # REMOVE FROM TEMP FOLDER
-rm -r /Users/aapetty/GitRepos/GitHub/SeaIcePrediction/Data/Temp/*
+rm -r /Users/aapetty/GitHub/akpetty/SeaIcePrediction/Data/Temp/*
 
 
 

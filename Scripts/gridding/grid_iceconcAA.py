@@ -66,15 +66,15 @@ def main(year, month, alg=0, outputGrid=1):
 
 	m = Basemap(projection='spstere',boundinglat=-55,lon_0=180, resolution='l'  )
 
-	datapath='/Users/aapetty/GitRepos/GitHub/SeaIcePrediction/Data/'
-	dataoutpath='/Users/aapetty/GitRepos/GitHub/SeaIcePrediction/DataOutput/IceConcAA/'
-	figpath='/Users/aapetty/GitRepos/GitHub/SeaIcePrediction/Figures/Antarctic/IceConc/'
+	datapath='/Users/aapetty/GitHub/akpetty/SeaIcePrediction/Data/'
+	dataoutpath='/Users/aapetty/GitHub/akpetty/SeaIcePrediction/DataOutput/IceConcAA/'
+	figpath='/Users/aapetty/GitHub/akpetty/SeaIcePrediction/Figures/Antarctic/IceConc/'
 
 	dx_res = 100000.
 	nx = int((m.xmax-m.xmin)/dx_res)+1; ny = int((m.ymax-m.ymin)/dx_res)+1
 	grid_str=str(int(dx_res/1000))+'km'
 	lonsG, latsG, xptsG, yptsG = m.makegrid(nx, ny, returnxy=True)
-	print lonsG.shape
+	#print(lonsG.shape)
 
 	poleStr='AA'
 
@@ -91,7 +91,7 @@ def main(year, month, alg=0, outputGrid=1):
 
 
 
-	if (year>2016):
+	if (year>2019):
 		ice_conc = ff.get_month_concSN_NRT(datapath, year, month, alg=alg, pole=poleStr, lowerConc=1, maxConc=1, mask=1, monthMean=1)
 		#ice_conc=ma.masked_where(ice_conc<=0.15, ice_conc)
 	else:
@@ -118,7 +118,7 @@ def main(year, month, alg=0, outputGrid=1):
 	ice_conc_ma=ma.masked_where(np.isnan(ice_concG), ice_concG)
 
 
-	plot_conc(figpath, m, xptsG, yptsG, ice_conc_ma, year, month, grid_str, poleStr='A')
+	plot_conc(figpath, m, xptsG, yptsG, ice_conc_ma, year, month, grid_str, poleStr=poleStr)
 
 	ice_conc_ma.dump(dataoutpath+'ice_conc'+grid_str+str(month)+str(year)+poleStr)
 
@@ -129,9 +129,9 @@ def main(year, month, alg=0, outputGrid=1):
 startYear=1979
 endYear=2018
 
-startMonth=6 #3=April, 7=August
+startMonth=10 #3=April, 7=August
 
-endMonth=6
+endMonth=10
 #-- run main program
 if __name__ == '__main__':
 	for y in range(startYear, endYear+1, 1):

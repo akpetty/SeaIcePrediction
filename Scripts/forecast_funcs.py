@@ -109,7 +109,7 @@ def plotForecastOneYear(figPath, years, extent, year, forecastVars, outVarStr, i
 
 	ax1.set_ylabel(iceType+r' (Million km$^2$)')
 	#ax1.set_xlabel('Years')
-	ax1.set_xlim(1980, 2020)
+	ax1.set_xlim(1980, 2024)
 	ax1.set_xticks(np.arange(1980, 2021, 10))
 	ax1.set_xticks(np.arange(1980, 2021, 5), minor=True)
 	#ax1.set_xticklabels([])
@@ -220,14 +220,21 @@ def get_month_concSN_NRT(datapath, year, month, alg=0, pole='A',  mask=1, maxCon
 	month_str = '%02d' % (month+1)
 	year_str=str(year)
 	files = glob(datapath+'/ICE_CONC/'+team+'/'+poleStr+'/NRT/*'+str(year)+month_str+'*')
-	
+	print(files)
 	print ('Num conc files:', size(files), 'in month:'+month_str)
 	ice_conc = ma.masked_all((size(files), rows, cols))
 	
 	for x in range(size(files)):
+		print('x', x)
 		fd = open(files[x], 'r')
+		print(fd)
 		data = fromfile(file=fd, dtype=datatype)
+		print(data)
+		print(data.shape)
 		data = data[header:]
+		print(data)
+		print(data.shape)
+		print(files[x], x, data.shape)
 		#FIRST 300 FILES ARE HEADER INFO
 		ice_conc[x] = reshape(data, [rows, cols])
 		
@@ -313,16 +320,24 @@ def GetWeightedPredVar(deriveddatapath, yearsTr, yearT, extentDTT, predvarYrsT, 
     """
 	
 	if (hemStr=='S'):
-		savedatapath=deriveddatapath+'/Antarctic/'
+		savedatapath=deriveddatapath+'forecasts/Antarctic/'
 	elif (hemStr=='N'):
-		savedatapath=deriveddatapath+'/Arctic/'
+		savedatapath=deriveddatapath+'forecasts/Arctic/'
 	if (region=='A'):
-		savedatapath=deriveddatapath+'/Alaska/'
+		savedatapath=deriveddatapath+'forecasts/Alaska/'
 
 		
 	# Get detrended 2D forecast data
+	print(yearsTr)
+	print(predvarYrsT.shape)
+	print(yearT)
+	print(predvar_yrT.shape)
+
 	predvarYrsDT, predvarYrDT = get_detrended_yr(yearsTr, yearT, predvarYrsT, predvar_yrT, numYearsReq)
 
+	print(extentDTT)
+	print(extentDTT.shape)
+	print(predvarYrsDT.shape)
 	# Correlate detrended time series
 	rvalsDT = get_correlation_coeffs(predvarYrsDT, extentDTT, numYearsReq)
 	
@@ -390,7 +405,8 @@ def get_ice_extentN(extdatapath, Month, start_year, end_year, icetype='extent', 
 
 	Years=Years[where(Extents>0)]
 	Extents=Extents[where(Extents>0)]
-
+	print(Years)
+	print(Extents)
 	#Extents=ma.masked_where(Extents<0, Extents)
 	#Extent=array(Extent[start_year-1979:end_year-1979+1])
 
@@ -459,8 +475,8 @@ def getIceExtentAreaPetty(dataOutPath, month, start_year, end_year, icetype='ext
 
 	return Years, Extents
 
-def CalcForecastMultiVar(rawdatapath, deriveddatapath, yearF, startYear, predvarYrs, fmonth, pmonth=9, region=0, anomObs=1 , outWeights=0, 
-	icetype='extent', numYearsReq=5, weight=1, hemStr='N', siiVersion='v2.1'):
+def CalcForecastMultiVar(rawdatapath, deriveddatapath, yearF, startYear, predvarYrs, fmonth, pmonth=9, region=0, anomObs=0 , outWeights=0, 
+	icetype='extent', numYearsReq=5, weight=1, hemStr='N', siiVersion='v3.0'):
 	""" The primary sea ice forecast function. 
 
 	NB: This should probably be converted to a class at some point.
@@ -486,11 +502,13 @@ def CalcForecastMultiVar(rawdatapath, deriveddatapath, yearF, startYear, predvar
 
 	if (region==0): 
 	# use the NSIDC Arctic/Antarctic Sea Ice Index
-		print (startYear, yearP-1, pmonth)
+		print ('NSIDC data', startYear, yearP-1, pmonth)
 
 		# Get the NSIDC sea ice index data
 		yearsPr, extentTr = get_ice_extentN(rawdatapath, pmonth, startYear, yearP-1, 
 			icetype=icetype, version=siiVersion, hemStr=hemStr)
+		print('Years pr:', yearsPr)
+		print('extentTr', extentTr)
 
 		# De-trend the extent data
 		extentDTr, lineTr=get_varDT(yearsPr, extentTr)
@@ -533,17 +551,14 @@ def CalcForecastMultiVar(rawdatapath, deriveddatapath, yearF, startYear, predvar
 	else: 
 		
 		# Get regional sea ice indices we generate
-		if (hemStr=='N'):
-			poleStr='A'
-		elif (hemStr=='S'):
-			poleStr='AA'
-
-		extentALL=loadtxt(deriveddatapath+'/Extent/'+'ice_'+icetype+'_M'+str(pmonth)+'R'+str(region)+'_'+str(startYearF)+'2017'+poleStr)
+		try:
+			extentALL=loadtxt(deriveddatapath+'/Extent/'+'ice_'+icetype+'_M'+str(pmonth)+'_19792021'+region)
+		except:
+			extentALL=loadtxt(deriveddatapath+'/Extent/'+'ice_'+icetype+'_M'+str(pmonth)+'_19792021'+region, delimiter=',') 
 		
-
 		#get years and extent for years preceeding the given forecast year
-		yearsPr=np.arange(startYear, yearP, 1)
-		extentTr=extentALL[0:yearP-startYear]
+		yearsPr=np.arange(1979, yearP, 1)
+		extentTr=extentALL[0:yearP-1979]
 
 		# De-trend the extent data
 		extentDTr, lineTr=get_varDT(yearsPr, extentTr)
@@ -565,12 +580,12 @@ def CalcForecastMultiVar(rawdatapath, deriveddatapath, yearF, startYear, predvar
 		pdate='31'
 
 	# Get forecast years
-	yearsFr=np.arange(startYearF, yearF, 1)
-
-	#print ('Training years', yearsPr)
-	#print ('Predicted year', yearP)
+	#yearsFr=np.arange(startYearF, yearF, 1)
+	#print('Training years:', yearsFr)
+	print ('Training years', yearsPr)
+	print ('Predicted year', yearP)
 	#print ('Forecast year', yearF)
-	#print ('Training start year', startYear)
+	print ('Training start year', startYear)
 	#print ('Training start year', startYearF)
 	#print ('Forecast years', yearsFr)
 
@@ -580,13 +595,13 @@ def CalcForecastMultiVar(rawdatapath, deriveddatapath, yearF, startYear, predvar
 		if (varT in ['sst','conc','melt','melt_nan', 'pmas']):
 
 			# Get the gridded forecast data for training
-			VarYearsTr = get_gridvar(deriveddatapath, varT, fmonth, yearsFr, hemStr)
+			VarYearsTr = get_gridvar(deriveddatapath, varT, fmonth, yearsPr, hemStr)
 
 			# Get the gridded prediction data
 			VarYear = get_gridvar(deriveddatapath, varT, fmonth, array(yearF), hemStr)
-			
+			print('VarYear', yearF)
 			# Weight the gridded forecast data with historical sea ice extent
-			rvalsDT, unweightedpredVarT, predVarT, predVarTYr = GetWeightedPredVar(deriveddatapath, yearsFr, yearF, extentDTr, VarYearsTr, VarYear,varT, fmonth, pmonth, startYearF,numYearsReq, region, hemStr, icetype, normalize=0, outWeights=outWeights, weight=weight)
+			rvalsDT, unweightedpredVarT, predVarT, predVarTYr = GetWeightedPredVar(deriveddatapath, yearsPr, yearP, extentDTr, VarYearsTr, VarYear,varT, fmonth, pmonth, startYearF,numYearsReq, region, hemStr, icetype, normalize=0, outWeights=outWeights, weight=weight)
 		
 		# will be an array of 1 (intercept) and a number
 		predVarsTYr.append(predVarTYr)
@@ -607,6 +622,10 @@ def CalcForecastMultiVar(rawdatapath, deriveddatapath, yearF, startYear, predvar
 	extTrendP=(lineTr[-1]+(lineTr[-1]-lineTr[-2]))
 
 	extentForrAbs = extentForrDT+extTrendP
+
+	if (extentForrAbs <0.):
+		extentForrDT = extentForrDT - extentForrAbs
+		extentForrAbs=0.
 	
 	#print ('detrended extent forecast :', extentForrDT, 'Linear trend extent:',extTrendP, 'Absolute extent forecast:',extentForrAbs)
 	
@@ -697,13 +716,11 @@ def get_region_mask_sect(datapath, mplot, xypts_return=0):
 		return region_mask
 
 
-def get_conc_gridded(dataoutpath, yearsT, month, hemStr, concVersion='v2'):
+def get_conc_gridded(dataoutpath, yearsT, month, hemStr, concVersion='cdr_nt'):
 	""" Get gridded ice concentration data
 
 	Data gridded using linear interpolation of NASA Team concentration data onto a 100 km grid.
 	Used monthly data, then monthly means of the daily NRT data for 2015 onwards.
-
-
 	"""
 
 	if (hemStr=='N'):
@@ -711,18 +728,22 @@ def get_conc_gridded(dataoutpath, yearsT, month, hemStr, concVersion='v2'):
 	elif (hemStr=='S'):
 		poleStr='AA'
 
-
-	xpts=load(dataoutpath+concVersion+'xpts100km'+poleStr)
-	ypts=load(dataoutpath+concVersion+'ypts100km'+poleStr)
+	xpts=load(dataoutpath+'xpts100km'+poleStr, allow_pickle=True)
+	ypts=load(dataoutpath+'ypts100km'+poleStr, allow_pickle=True)
 
 	if (size(yearsT)>1):
 		conc_years=ma.masked_all((size(yearsT),xpts.shape[0], xpts.shape[1]))
 		x=0
 		for year in yearsT:
-			conc_years[x] = load(dataoutpath+concVersion+'ice_conc100km'+str(month)+str(year)+poleStr+concVersion)
+			
+			print ('data', dataoutpath+'ice_conc100km'+str(month)+str(year)+poleStr+concVersion)
+			concT = load(dataoutpath+'ice_conc100km'+str(month)+str(year)+poleStr+concVersion, allow_pickle=True)
+			print(np.nanmin(concT), np.nanmax(concT))
+			conc_years[x] = concT
 			x+=1
 	else:
-		conc_years = load(dataoutpath+concVersion+'ice_conc100km'+str(month)+str(yearsT)+poleStr+concVersion)
+		conc_years = load(dataoutpath+'ice_conc100km'+str(month)+str(yearsT)+poleStr+concVersion, allow_pickle=True)
+
 
 	return xpts, ypts, conc_years
 
@@ -755,7 +776,7 @@ def get_meltonset_gridded(dataoutpath, yearsT, freezemelt_str, hemStr):
 	return xpts, ypts, Melt_onset_years
 
 
-def get_gridvar(griddatapath, fvar, fmonth, yearsT, hemStr, concVersion=''):
+def get_gridvar(griddatapath, fvar, fmonth, yearsT, hemStr, concVersion='cdr_nt'):
 	""" Select which gridded forecast dataset to use in forecast
 
 	NB pond data left out for now.
@@ -766,9 +787,9 @@ def get_gridvar(griddatapath, fvar, fmonth, yearsT, hemStr, concVersion=''):
 
 	if (fvar=='conc'):
 		if (hemStr=='N'):
-			dataoutpath=griddatapath+'IceConcA/'
+			dataoutpath=griddatapath+'IceConcA/CDR/'
 		elif (hemStr=='S'):
-			dataoutpath=griddatapath+'IceConcAA/'
+			dataoutpath=griddatapath+'IceConcAA/CDR/'
 
 		xpts, ypts, VarYears=get_conc_gridded(dataoutpath, yearsT, fmonth, hemStr, concVersion=concVersion)
 		#rneg=0

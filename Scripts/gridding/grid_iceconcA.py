@@ -13,20 +13,21 @@ matplotlib.use("AGG")
 from mpl_toolkits.basemap import Basemap, shiftgrid
 import numpy as np
 from pylab import *
-from scipy.io import netcdf
+#from scipy.io import netcdf
 import numpy.ma as ma
 from matplotlib import rc
 from glob import glob
 import matplotlib.patches as patches
 from scipy.interpolate import griddata
 import pandas as pd
+from netCDF4 import Dataset
 #from scipy import stats
 import sys
 sys.path.append('../')
 
 import forecast_funcs as ff
 
-from netCDF4 import Dataset
+
 
 def plot_conc(figpath, m , xpts, ypts, conc_year, year, month, grid_str, poleStr='A'):
 	textwidth=4.
@@ -67,16 +68,14 @@ def main(year, month, alg=0, poleStr='A', outputGrid=0):
 
 	m = Basemap(projection='npstere',boundinglat=65,lon_0=0, resolution='l'  )
 
-	datapath='/Users/aapetty/GitRepos/GitHub/SeaIcePrediction/Data/'
-	dataoutpath='/Users/aapetty/GitRepos/GitHub/SeaIcePrediction/DataOutput/IceConcA/'
-	figpath='/Users/aapetty/GitRepos/GitHub/SeaIcePrediction/Figures/Arctic/IceConc/'
+	datapath='/Users/aapetty/GitHub/akpetty/SeaIcePrediction/Data/'
+	dataoutpath='/Users/aapetty/GitHub/akpetty/SeaIcePrediction/DataOutput/IceConcA/'
+	figpath='/Users/aapetty/GitHub/akpetty/SeaIcePrediction/Figures/Arctic/IceConc/'
 
 	dx_res = 100000.
 	nx = int((m.xmax-m.xmin)/dx_res)+1; ny = int((m.ymax-m.ymin)/dx_res)+1
 	grid_str=str(int(dx_res/1000))+'km'
-	lonsG, latsG, xptsG, yptsG = m.makegrid(nx, ny, returnxy=True)
-
-	
+	lonsG, latsG, xptsG, yptsG = m.makegrid(nx, ny, returnxy=True)	
 
 	if (outputGrid==1):
 		xptsG.dump(dataoutpath+'xpts'+grid_str+poleStr)
@@ -96,7 +95,8 @@ def main(year, month, alg=0, poleStr='A', outputGrid=0):
 		#ice_conc=ma.masked_where(ice_conc<=0.15, ice_conc)
 	else:
 		ice_conc = ff.get_month_concSN(datapath, year, month, alg=alg, pole=poleStr, lowerConc=1, maxConc=1, mask=1)
-				
+	
+	print('Ice conc shape:', ice_conc.shape)		
 	#ice_conc = ice_conc.filled(0)
 	
 	
@@ -126,12 +126,12 @@ def main(year, month, alg=0, poleStr='A', outputGrid=0):
 
 
 
-startYear=1979
-endYear=2018
+startYear=2020
+endYear=2021
 
-startMonth=8 #3=April, 7=August
+startMonth=6 #3=April, 7=August
 
-endMonth=8
+endMonth=6
 #-- run main program
 if __name__ == '__main__':
 	for y in range(startYear, endYear+1, 1):

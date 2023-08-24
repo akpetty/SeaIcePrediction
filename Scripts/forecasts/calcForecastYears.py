@@ -15,9 +15,9 @@ import sys
 sys.path.append('../')
 import forecast_funcs as ff
 from pylab import *
+import os
 
-
-def main(year, fmonth, pmonth, fvars=['conc'], iceType='extent', hemStr='N', siiVersion='v3.0', startYear=1979, weight=1, region=0, numYearsReq=5, plotForecast=1, plotSkill=1, outSkill=1, outLine=1, outWeights=1):
+def main(year, fmonth, pmonth, fvars=['conc'], iceType='extent', hemStr='N', siiVersion='v3.0', anomObsT=1, startYear=1979, weight=1, region=0, numYearsReq=5, plotForecast=1, plotSkill=1, outSkill=1, outLine=1, outWeights=1):
 	""" 
 	Main sea ice forecast script. Can be run here (and looped )
 
@@ -26,12 +26,13 @@ def main(year, fmonth, pmonth, fvars=['conc'], iceType='extent', hemStr='N', sii
 		endYear=2018 # End of forecast
 		fmonth=11 #6=June, 9=Sep #  Forecast month
 		pmonth=2 #9=SEP # Predicted month
-
+	
 		fvars: forecast variables (e.g. 'conc'). Need to be in brackets.
 		weight: Spatially weighting the data (1=True)
 		iceType: Ice type being forecast ('extent' or 'area')
 		hemStr: Hemipshere (N or S)
 		siiVersion: version of the NSIDC sea ice index (if used as the observed ice state)
+		anomObsT: flag for if we have data for the given forecast month (1 = True)
 		startYear: Start year of training data (default = 1980)
 		region: Region being forecast (0 is pan Arctic/Antartctic)
 			#0 implies pan-Arctic or Antarctic
@@ -41,6 +42,9 @@ def main(year, fmonth, pmonth, fvars=['conc'], iceType='extent', hemStr='N', sii
 			#5 Ross Sea
 			#6 Amundsen/BHausen Sea
 			#A Alaskan
+			#S Siberian
+			#At Atlantic
+			#C Canadian
 
 		numYearsReq: (defaul 5) Number of years required in a grid cell for it to count towards the training data
 		plotSkill: =1 for plotting the skill
@@ -59,21 +63,63 @@ def main(year, fmonth, pmonth, fvars=['conc'], iceType='extent', hemStr='N', sii
 			Estimated forecast error (1 SD)
 
 	"""
-	repoPath='/Users/aapetty/GitRepos/GitHub/SeaIcePrediction/'
+	repoPath='/Users/aapetty/GitHub/akpetty/SeaIcePrediction/'
 	rawDataPath = repoPath+'/Data/' 
 	derivedDataPath = repoPath+'/DataOutput/'
 	
 
 	if (hemStr=='S'):
-		saveDataPath=derivedDataPath+'/Antarctic/'
-		figPath=repoPath+'/Figures/Antarctic/YearlyPredictions/'
+		saveDataPath=derivedDataPath+'forecasts/Antarctic/'
+		figPath=repoPath+'Figures/forecasts/Antarctic/YearlyPredictions/'
 	elif (hemStr=='N'):
-		saveDataPath=derivedDataPath+'/Arctic/'
-		figPath=repoPath+'/Figures/Arctic/YearlyPredictions/'
+		saveDataPath=derivedDataPath+'forecasts/Arctic/'
+		figPath=repoPath+'Figures/forecasts/Arctic/YearlyPredictions/'
 	
 	if (region=='A'):
-		saveDataPath=derivedDataPath+'/Alaska/'
+		saveDataPath=derivedDataPath+'forecasts/Alaska/'
 		figPath=repoPath+'/Figures/Alaska/YearlyPredictions/'
+
+	if (region=='Alaska_v2'):
+		saveDataPath=derivedDataPath+'forecasts/Alaska/'
+		figPath=repoPath+'/Figures/Alaska/YearlyPredictions/'
+
+	if (region=='Siberia_v2'):
+		saveDataPath=derivedDataPath+'forecasts/Siberia/'
+		figPath=repoPath+'/Figures/Siberia/YearlyPredictions/'
+	
+	if (region=='Atlantic_v2'):
+		saveDataPath=derivedDataPath+'forecasts/Atlantic/'
+		figPath=repoPath+'/Figures/Atlantic/YearlyPredictions/'
+
+	if (region=='Canadian_v2'):
+		saveDataPath=derivedDataPath+'forecasts/Canadian/'
+		figPath=repoPath+'/Figures/Canadian/YearlyPredictions/'
+
+	if (region=='Alaska_v3'):
+		saveDataPath=derivedDataPath+'forecasts/Alaska/'
+		figPath=repoPath+'/Figures/Alaska/YearlyPredictions/'
+
+	if (region=='Siberia_v3'):
+		saveDataPath=derivedDataPath+'forecasts/Siberia/'
+		figPath=repoPath+'/Figures/Siberia/YearlyPredictions/'
+	
+	if (region=='Atlantic_v3'):
+		saveDataPath=derivedDataPath+'forecasts/Atlantic/'
+		figPath=repoPath+'/Figures/Atlantic/YearlyPredictions/'
+
+	if (region=='Canadian_v3'):
+		saveDataPath=derivedDataPath+'forecasts/Canadian/'
+		figPath=repoPath+'/Figures/Canadian/YearlyPredictions/'
+
+	print('save path:', saveDataPath)
+	print('figure path:', figPath)
+
+	if not os.path.exists(saveDataPath):
+		os.makedirs(saveDataPath)
+
+	if not os.path.exists(figPath):
+		os.makedirs(figPath)
+
 
 	print ('Forecast year:', year)
 	print ('Forecast data month:', fmonth, 'Predicted month:', pmonth)
@@ -83,13 +129,10 @@ def main(year, fmonth, pmonth, fvars=['conc'], iceType='extent', hemStr='N', sii
 	print ('Weighted:', weight)
 
 	varStrsOut=''.join(fvars)
-	outStr='forecastDump'+iceType+varStrsOut+'fm'+str(fmonth)+'pm'+str(pmonth)+'R'+str(region)+str(startYear)+str(year)+'W'+str(weight)+'SII'+siiVersion
+	outStr='forecastDump'+iceType+varStrsOut+'fm'+str(fmonth)+'pm'+str(pmonth)+'R'+str(region)+str(startYear)+str(year)+'W'+str(weight)+'SII'+siiVersion+''
 
-	if (year<2018):
-		anomObsT=1
-	else:
-		anomObsT=0
 
+	print('Do we have observational evidence of this year?', anomObsT)
 	
 	forecastVals=ff.CalcForecastMultiVar(rawDataPath, derivedDataPath, year, startYear, fvars, fmonth, pmonth=pmonth,
 			region=region, anomObs=anomObsT, numYearsReq=numYearsReq, weight=weight, outWeights=outWeights, 
@@ -108,30 +151,60 @@ def main(year, fmonth, pmonth, fvars=['conc'], iceType='extent', hemStr='N', sii
 		if (region==0):
 			years, extent = ff.get_ice_extentN(rawDataPath, pmonth, startYear, year, 
 					icetype=iceType, version=siiVersion, hemStr=hemStr)
+			#print(years)
+			#print(extent)
 			
-			ff.plotForecastOneYear(figPath, years, extent, year, forecastVals, outStr, iceType, minval=2, maxval=8)
+			ff.plotForecastOneYear(figPath, years, extent, year, forecastVals, outStr, iceType, minval=np.floor(np.percentile(extent, 1)), maxval=np.ceil(np.percentile(extent, 99)))
 
 
-		elif (region=='A'):
-			poleStr='A'
+		elif isinstance(region, str):
 
-			extent=loadtxt(derivedDataPath+'/Extent/'+'ice_'+iceType+'_M'+str(pmonth)+'R'+str(region)+'_'+str(startYear)+'2017'+poleStr)
+			try:
+				extent=loadtxt(derivedDataPath+'/Extent/'+'ice_'+iceType+'_M'+str(pmonth)+'_19792021'+region, delimiter=',')
+			except:
+				extent=loadtxt(derivedDataPath+'/Extent/'+'ice_'+iceType+'_M'+str(pmonth)+'_19792021'+region, delimiter=',') 
+		
 			extent=extent[0:year-startYear+1]
 			years=np.arange(startYear, startYear+size(extent), 1)
 
-			ff.plotForecastOneYear(figPath, years, extent, year, forecastVals, outStr, iceType, minval=0, maxval=2)
+			print('Plotting and saving to: ', figPath)
+			ff.plotForecastOneYear(figPath, years, extent, year, forecastVals, outStr, iceType, minval=np.floor(np.percentile(extent, 1)), maxval=np.ceil(np.percentile(extent, 99)))
 
-		
+	return year, forecastVals[3], extent[-1]
 
 #-- run main program
 if __name__ == '__main__':
 	#main(2015, 6, 9)
-	for y in range(1990, 2018+1, 1):
-		main(y, 7, 9, iceType='extent', hemStr='N', startYear=1979, region=0)
+	years=[]
+	forecasts=[]
+	extents=[]
+
+	region='Canadian_v3'
+	if isinstance(region, str):
+		region_str = region
+	else:
+		region_str=str(region)
+
+	start_year=1990
+	end_year=2021
+	m=8
+	p=9
+	iceType='extent'
+
+	for y in range(start_year, end_year+1, 1):
+		year, forecast, extent = main(y, m, p, iceType=iceType, hemStr='N', startYear=1979, region=region)
 	#	for m in range(startMonth, endMonth+1):
-	#		print (y, m)
-	#		
-				
+		years.append(year)
+		forecasts.append(forecast)
+		extents.append(extent)
+	print(years)
+	print(forecasts)
+	print(extents)
+
+	savetxt('../../DataOutput/forecasts/GSFC_Petty_time'+str(m)+str(p)+str(start_year)+'-'+str(end_year)+region_str+'.txt', np.asarray(years).reshape(1, np.asarray(years).shape[0]), fmt='%i', delimiter=',') 
+	savetxt('../../DataOutput/forecasts/GSFC_Petty_init'+str(m)+str(p)+region_str+iceType+'.txt', np.asarray(forecasts).reshape(1, np.asarray(forecasts).shape[0]),  fmt='%2.3f', delimiter=',') 
+	savetxt('../../DataOutput/forecasts/GSFC_Petty_sep_obs_'+iceType+str(m)+str(p)+region_str+'.txt', np.asarray(extents).reshape(1, np.asarray(extents).shape[0]),  fmt='%2.3f', delimiter=',') 
+
 
 
 

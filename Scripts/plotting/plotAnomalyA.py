@@ -27,27 +27,27 @@ rc('font',**{'family':'sans-serif','sans-serif':['Arial']})
 m = Basemap(projection='npstere',boundinglat=65,lon_0=0, resolution='l'  )
 
 
-figpath='../../Figures/Arctic/Anomalies/'
-dataoutpath='../../DataOutput/'
+figpath='/Users/aapetty/GitHub/akpetty/SeaIcePrediction/Figures/forecasts/Arctic/Anomalies/'
+dataoutpath='/Users/aapetty/GitHub/akpetty/SeaIcePrediction/DataOutput/'
 
 startYear=1979
-yearT=2018
-fmonth=7 #6=june
+yearT=2023
+fmonth=6 #6=june
 pmonth=9 #6=june
 
 
 hemStr='N'
 if (hemStr=='S'):
-	weightsdataoutpath=dataoutpath+'/Antarctic/'
+	weightsdataoutpath=dataoutpath+'forecasts/Antarctic/'
 	poleStr='AA'
 elif (hemStr=='N'):
-	weightsdataoutpath=dataoutpath+'/Arctic/'
+	weightsdataoutpath=dataoutpath+'forecasts/Arctic/'
 	poleStr='A'
 
 #xpts, ypts, Melt_onset_years =pfuncs.get_meltonset(m, data_path, 'melt_onset', -0.5, 0, 0, str(start_year), str(end_year))
 
-xpts=load(dataoutpath+'IceConcA/xpts100km'+poleStr)
-ypts=load(dataoutpath+'IceConcA/ypts100km'+poleStr)
+xpts=load(dataoutpath+'IceConcA/CDR/xpts100km'+poleStr, allow_pickle=True)
+ypts=load(dataoutpath+'IceConcA/CDR/ypts100km'+poleStr, allow_pickle=True)
 
 varStr='conc'
 icetype='extent'
@@ -61,12 +61,12 @@ else:
 	regionOut='Arctic'
 
 
-r_valsDT=load(weightsdataoutpath+'rvalsDT'+varStr+icetype+'fm'+str(fmonth)+'pm'+str(pmonth)+'R'+str(region)+str(startYear)+str(yearT)+'.txt')
-predvarDT=load(weightsdataoutpath+'predvarYrDT'+varStr+icetype+'fm'+str(fmonth)+'pm'+str(pmonth)+'R'+str(region)+str(startYear)+str(yearT)+'.txt')
+r_valsDT=load(weightsdataoutpath+'rvalsDT'+varStr+icetype+'fm'+str(fmonth)+'pm'+str(pmonth)+'R'+str(region)+str(startYear)+str(yearT)+'.txt', allow_pickle=True)
+predvarDT=load(weightsdataoutpath+'predvarYrDT'+varStr+icetype+'fm'+str(fmonth)+'pm'+str(pmonth)+'R'+str(region)+str(startYear)+str(yearT)+'.txt', allow_pickle=True)
 
 
-minval=-0.5
-maxval=0.5
+minval=0.5
+maxval=-0.5
 
 
 fig = figure(figsize=(3,3*0.8))
@@ -77,7 +77,7 @@ im1 = m.contourf(xpts , ypts, r_valsDT,levels=[0.25, 1.], colors='none', hatches
 im2 = m.pcolormesh(xpts, ypts, predvarDT,vmin=minval, vmax=maxval, cmap=cm.RdBu_r, shading='interp', zorder=2)
 #im1 = m.pcolormesh(xpts , ypts, rvals, cmap=cm.cubehelix, vmin=minval, vmax=maxval,shading='flat', zorder=2)
 
-m.fillcontinents(color='w',lake_color='0.9', zorder=2)
+#m.fillcontinents(color='w',lake_color='0.9', zorder=2)
 m.drawcoastlines(linewidth=0.25, zorder=5)
 m.drawparallels(np.arange(90,-90,-10), linewidth = 0.25, zorder=3)
 m.drawmeridians(np.arange(-180.,180.,30.), linewidth = 0.25, zorder=3)

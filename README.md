@@ -111,6 +111,10 @@ Melt onset data: http://neptune.gsfc.nasa.gov/csb/index.php?section=54
 
 Simulated melt pond data were provided by CPOM-Reading, with the detrended forecast data included in this repo.
 
+## Notes on sea ice extent
+
+I tend to use the NSIDC Arctic Sea Ice Index where possible, although I can also generate my own sea ice indices as/when needed. In 1987/88 there were issues with a alck of data so some months have no sea ice extent. WHile I await time to adapt the code to deal with this missing data, i've kinda dodgily filled in these months for now with made up data..Something to keep in mind (the v3.0 SIE files..)
+
 
 ### References
 
